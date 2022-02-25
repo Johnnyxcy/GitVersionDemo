@@ -3,9 +3,6 @@ import pathlib
 import typing
 import re
 
-from sympy import E
-
-
 def get_git_version(repo: pathlib.Path) -> typing.Optional[str]:
     git = pathlib.Path(repo, '.git')
     head_path = git.joinpath('HEAD')
