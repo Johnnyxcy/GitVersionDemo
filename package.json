@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "scripts": {
+    "release": "python release.py"
+  }
+}
