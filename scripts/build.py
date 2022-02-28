@@ -52,21 +52,20 @@ class Builder(object):
         logger.debug(f'* sha={sha}')
 
         pre_release: str
-        parent_commit_sha: str
+        build_meta: str
         if branch_name == 'develop':
             pre_release = 'alpha'
-            parent_commit_sha = repo.heads['main'].commit.hexsha
+            build_meta = repo.git.rev_list('--count', f'{repo.heads["main"].commit.hexsha}..{current_commit}')
         elif branch_name.startswith('release') or branch_name.startswith('hotfix'):
             pre_release = 'beta'
-            parent_commit_sha = repo.heads['develop'].commit.hexsha
+            build_meta = repo.git.rev_list('--count', f'{repo.heads["develop"].commit.hexsha}..{current_commit}')
         elif re.fullmatch(r'feature/T[0-9]+', branch_name) or re.fullmatch(r'fix/T[0-9]+', branch_name):
             manifest = branch_name.split('/')
-            parent_commit_sha = repo.heads['develop'].commit.hexsha
+            build_meta = repo.git.rev_list('--count', f'{repo.heads["develop"].commit.hexsha}..{current_commit}')
             pre_release = manifest[1]
         else:
             raise NotImplementedError(f'Not Support build branch {branch_name}')
 
-        build_meta = repo.git.rev_list('--count', f'{parent_commit_sha}..{current_commit}')
         semantic_version = f'{major}.{minor}.{patch}-{pre_release}.{build_meta}'
         print('semantic_version', semantic_version)
 
