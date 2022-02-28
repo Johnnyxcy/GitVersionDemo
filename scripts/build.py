@@ -4,8 +4,7 @@ import platform
 import re
 import subprocess
 import sys
-
-from git import Repo
+from git.repo import Repo
 
 from build_logger import logger
 
@@ -57,7 +56,7 @@ class Builder(object):
         if branch_name == 'develop':
             pre_release = 'alpha'
             parent_commit_sha = repo.heads['main'].commit.hexsha
-        elif branch_name.startswith('release'):
+        elif branch_name.startswith('release') or branch_name.startswith('hotfix'):
             pre_release = 'beta'
             parent_commit_sha = repo.heads['HEAD'].commit.hexsha
         elif re.fullmatch(r'feature/T[0-9]+', branch_name) or re.fullmatch(r'fix/T[0-9]+', branch_name):
@@ -70,22 +69,6 @@ class Builder(object):
         build_meta = repo.git.rev_list('--count', f'{parent_commit_sha}..{current_commit}')
         semantic_version = f'{major}.{minor}.{patch}-{pre_release}.{build_meta}'
         print('semantic_version', semantic_version)
-        # semantic_version = f'{version}'
-        # if branch_name == 'develop':
-        #     semantic_version += '-alpha'
-        # elif branch_name.startswith('release'):
-        #     semantic_version += '-beta'
-        # else:
-        #     semantic_version += f'-{branch_name}'
-        # current_commit = repo.head.commit
-        # main_commit = repo.heads['main'].commit
-        # print(branch_name)
-        # print('current_commit', current_commit)
-        # print('main_commit', main_commit)
-        # print(repo.git.rev_list('--count', f'{main_commit}..{current_commit}'))
-        # semantic_version += f'+{str(repo.head.commit)[:7]}'
-        # print(semantic_version)
-
 
 builder = Builder()
 
