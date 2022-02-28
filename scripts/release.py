@@ -1,10 +1,11 @@
-import pathlib
-from git_utils import get_git_version
+# import pathlib
+# import logging
+# from git import Repo
 
-def release() -> None:
+# def release() -> None:
+#     repo = Repo(pathlib.Path(__file__).parent.parent)
+#     logging.basicConfig(handlers=[logging.StreamHandler()], level=logging.INFO, format='[%(levelname)s][%(asctime)s]%(message)s')
 
-    print(get_git_version(pathlib.Path(__file__).parent.parent))
 
-
-if __name__ == '__main__':
-    release()
+# if __name__ == '__main__':
+#     release()
