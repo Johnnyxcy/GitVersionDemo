@@ -58,10 +58,10 @@ class Builder(object):
             parent_commit_sha = repo.heads['main'].commit.hexsha
         elif branch_name.startswith('release') or branch_name.startswith('hotfix'):
             pre_release = 'beta'
-            parent_commit_sha = repo.heads['HEAD'].commit.hexsha
+            parent_commit_sha = repo.heads['develop'].commit.hexsha
         elif re.fullmatch(r'feature/T[0-9]+', branch_name) or re.fullmatch(r'fix/T[0-9]+', branch_name):
             manifest = branch_name.split('/')
-            parent_commit_sha = repo.heads['HEAD'].commit.hexsha
+            parent_commit_sha = repo.heads['develop'].commit.hexsha
             pre_release = manifest[1]
         else:
             raise NotImplementedError(f'Not Support build branch {branch_name}')
