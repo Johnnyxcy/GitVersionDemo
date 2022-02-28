@@ -8,7 +8,7 @@ from git import Repo
 # {major}.{minor}.{patch}-{tag}+{buildmetadata}
 
 
-def build(target_platform: typing.Literal['windows', 'mac'], target_architecture: str) -> None:
+def build() -> None:
     root = pathlib.Path(__file__).parent.parent
     version = json.load(open(root.joinpath('package.json')))['version']
     repo = Repo(root.joinpath('.git'))
@@ -24,3 +24,5 @@ def build(target_platform: typing.Literal['windows', 'mac'], target_architecture
 
     semantic_version += f'+{str(repo.head.commit)[:7]}'
     print(semantic_version)
+
+build()
