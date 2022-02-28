@@ -21,7 +21,11 @@ def build() -> None:
         semantic_version += '-beta'
     else:
         semantic_version += f'-{branch_name}'
-
+    current_commit = repo.head.commit
+    main_commit = repo.heads['main'].commit
+    print('current_commit', current_commit)
+    print('main_commit', main_commit)
+    print(repo.git.rev_list('--count', f'{main_commit}..{current_commit}'))
     semantic_version += f'+{str(repo.head.commit)[:7]}'
     print(semantic_version)
 
