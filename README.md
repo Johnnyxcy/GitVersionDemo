@@ -1,1 +1,3 @@
 # GitVersionDemo
+
+SOME NEW INFORMATION
