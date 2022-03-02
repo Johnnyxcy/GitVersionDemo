@@ -9,7 +9,6 @@ from git.repo import Repo
 from build_logger import logger
 
 
-# {major}.{minor}.{patch}-{tag}+{buildmetadata}
 
 def _exec(command: str) -> str:
     code, output = subprocess.getstatusoutput(command)
@@ -19,10 +18,10 @@ def _exec(command: str) -> str:
 
 
 class Builder(object):
+    # {major}.{minor}.{patch}-{tag}+{buildmetadata}
 
     def build(self) -> None:
         """入口"""
-
         root = pathlib.Path(__file__).parent.parent
         version: str = json.load(open(root.joinpath('package.json')))['version']
         if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
@@ -56,9 +55,12 @@ class Builder(object):
         if branch_name == 'develop':
             pre_release = 'alpha'
             build_meta = repo.git.rev_list('--count', f'{repo.heads["main"].commit.hexsha}..{current_commit}')
-        elif branch_name.startswith('release') or branch_name.startswith('hotfix'):
+        elif branch_name.startswith('release'):
             pre_release = 'beta'
             build_meta = repo.git.rev_list('--count', f'{repo.heads["develop"].commit.hexsha}..{current_commit}')
+        elif branch_name.startswith('hotfix'):
+            pre_release = 'beta'
+            build_meta = repo.git.rev_list('--count', f'{repo.heads["main"].commit.hexsha}..{current_commit}')
         elif re.fullmatch(r'feature/T[0-9]+', branch_name) or re.fullmatch(r'fix/T[0-9]+', branch_name):
             manifest = branch_name.split('/')
             build_meta = repo.git.rev_list('--count', f'{repo.heads["develop"].commit.hexsha}..{current_commit}')
