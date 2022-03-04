@@ -165,6 +165,6 @@ def release(release_type: typing.Literal['patch', 'minor'], ignore_uncommitted_c
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser('demo arg parser')
-    argparser.add_argument('release_type', required=True, dest='release_type', type=str, choices=['minor', 'patch'])
+    argparser.add_argument('release_type', type=str, choices=['minor', 'patch'], help='Type to release')
     args = argparser.parse_args()
     release(args.release_type)
