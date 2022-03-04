@@ -61,17 +61,10 @@ def release(release_type: typing.Literal['patch', 'minor'], ignore_uncommitted_c
     try:
         root = pathlib.Path(__file__).parent.parent
         sys.path.append(root.as_posix())
-        sys.path.append(root.joinpath('src/ebt').as_posix())
 
         package_json_fp = root.joinpath('package.json')
         package_json: typing.Final[typing.Dict[str, typing.Any]] = json.load(open(package_json_fp, encoding='utf-8'))
-
-        app_package_json_fp = root.joinpath('build/app/package.json')
-        app_package_json: typing.Final[typing.Dict[str, typing.Any]] = json.load(open(app_package_json_fp, encoding='utf-8'))
-        _package_version: str = package_json['version']
-        app_version: str = app_package_json['version']
-        if app_version != package_json['version']:
-            raise ValueError(f'package.json 的 version 字段 {_package_version} 必须和 build/app/package.json 的 version 字段 {app_version} 一致')
+        app_version = package_json['version']
         if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', app_version):
             raise ValueError('package.json 中的 version 字段必须是 {major}.{minor}.{patch}, 并且每个关键词都是自然数')
 
@@ -110,10 +103,8 @@ def release(release_type: typing.Literal['patch', 'minor'], ignore_uncommitted_c
 
         def _change_version(version: str) -> None:
             package_json['version'] = version
-            app_package_json['version'] = version
             logger.info(f'Versioning {version}...')
             open(package_json_fp, mode='w', encoding='utf-8').write(json.dumps(package_json, ensure_ascii=True, indent=4))
-            open(app_package_json_fp, mode='w', encoding='utf-8').write(json.dumps(app_package_json, ensure_ascii=True, indent=4))
             
 
         if release_type == 'patch':
