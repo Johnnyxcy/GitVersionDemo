@@ -145,7 +145,7 @@ def release(release_type: typing.Literal['patch', 'minor'], ignore_uncommitted_c
             logger.info(f'Switch back to develop')
             repo.git.checkout('develop')
 
-            _change_version(semantic_version)
+            _change_version(f'{major}.{int(minor) + 1}.{patch}')
             repo.git.add(A=True)
             repo.git.commit(m=f'develop: Development(v{semantic_version})\n\n@bypass-review')
             logger.info(f'Pushing develop...')
